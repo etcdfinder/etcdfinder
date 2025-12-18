@@ -41,6 +41,7 @@ func NewMeilisearchStore(host, indexName, matchingStrategy string) (KVStore, err
 		// Ignore error as index might not exist
 		// In a production app we might want to check the error type
 		logger.Infof("Failed to delete existing index: %v", err)
+		return nil, err
 	}
 
 	return &MeilisearchStore{
