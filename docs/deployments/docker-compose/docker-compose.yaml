@@ -14,7 +14,7 @@ services:
     depends_on:
       - etcdfinder
   etcdfinder:
-    image: etcdfinder/etcdfinder:latest
+    image: ghcr.io/etcdfinder/etcdfinder:latest
     container_name: etcdfinder
     expose:
       - "8080"
