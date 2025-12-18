@@ -1,0 +1,15 @@
+server:
+  port: 8080
+log:
+  level: info
+etcd:
+  endpoints: localhost:2379
+  root_etcd_prefix: ""
+  watch_event_channel_size: 100
+  pagination_limit: 10000
+datastore:
+  type: meilisearch
+  meilisearch:
+    host: http://localhost:7700
+    index_name: etcd-keys
+    matching_strategy: frequency
