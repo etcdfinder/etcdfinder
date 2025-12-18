@@ -46,7 +46,7 @@ func Load(configPath string) (*Config, error) {
 	} else {
 		viper.SetConfigName("config")
 		viper.SetConfigType("yaml")
-		viper.AddConfigPath("internal/config/")
+		viper.AddConfigPath(".")
 	}
 
 	// Environment variables will have highest priority
