@@ -22,13 +22,24 @@ This order prevents race conditions where new events could be missed during the 
 The watch goroutine continuously monitors etcd for changes and applies them (put/delete) to Meilisearch in near real-time.
 
 > [!NOTE]
-> **Error Handling Strategy**: If the application fails to handle any watch event, it will exit and restart. This fail-fast mechanism prevents data inconsistency by forcing a full re-sync upon restart. We recognize this as a current limitation and welcome suggestions for more resilient error handling strategies (please open an issue).
+> **Event Consistency Strategy**: The watch mechanism tracks the `ModRevision` of each event to detect gaps in the event stream. If a ModRevision mismatch is detected (meaning events were missed due to network issues or other failures), the watch automatically restarts from the last successfully processed revision using etcd's `WithRev()` option. This ensures no events are lost without requiring a full application restart. Only critical watch errors (e.g., etcd connection failures detected by the error channel) will cause the application to exit and perform a full re-sync.
 
 ### Consistency Guarantees
 
 - **Writes**: Go to etcd first, then to search index
 - **Reads**: Always from etcd (source of truth)
 - **Search**: From Meilisearch (may lag slightly behind etcd)
+
+### Connection Health Monitoring
+
+To ensure the system maintains eventual consistency, we've implemented an **etcd connection auditor** that runs as a background goroutine. This auditor enhances our fail-fast strategy and improves overall system reliability.
+
+#### Why This Improves Eventual Consistency
+
+Connection failures are detected within 1 minute:
+- The application exits and restarts automatically
+- Upon restart, the full re-sync process ensures Meilisearch catches up with etcd's latest state
+- This prevents prolonged periods of staleness in the search index
 
 ### Monitoring
 

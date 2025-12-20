@@ -39,9 +39,11 @@ func main() {
 	logger.Infof("Connecting to etcd at %s", conf.Etcd.Endpoints)
 	etcdClient, err := etcd.NewClient(
 		strings.Split(conf.Etcd.Endpoints, lib.ETCD_ENDPOINTS_SEPERATOR),
-		int64(conf.Etcd.WatchEventChannelSize),
+		conf.Etcd.WatchEventChannelSize,
 		conf.Etcd.RootPrefixEtcd,
-		int64(conf.Etcd.PaginationLimit),
+		conf.Etcd.PaginationLimit,
+		conf.Etcd.EtcdAuditPeriod,
+		conf.Etcd.MaxWatchRetries,
 	)
 	if err != nil {
 		logger.Fatalf("Failed to create etcd client: %v", err)
@@ -72,6 +74,15 @@ func main() {
 			logger.Fatalf("ChangeUpdater failed: %v", err)
 		}
 		logger.Fatalf("ChangeUpdater stopped unexpectedly")
+	}()
+
+	// Start etcd connection auditor in background
+	go func() {
+		auditorErrCh := etcdClient.StartAuditor(ctx)
+		if err := <-auditorErrCh; err != nil {
+			logger.Fatalf("Etcd connection auditor failed: %v", err)
+		}
+		logger.Fatalf("Etcd connection auditor stopped unexpectedly")
 	}()
 
 	logger.Debugf("Initializing KV store with existing etcd data...")
