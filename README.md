@@ -3,7 +3,7 @@
 ⚡ **A lightning‑fast, modern UI for etcd**
 
 <p align="center">
-  <img alt="etcdfinder demo" src="https://github.com/user-attachments/assets/87ba2b8a-8977-42b2-863d-ad8ee273e4b0" />
+  <img alt="etcdfinder demo" src="https://github.com/user-attachments/assets/d193b2cd-fd79-422a-bcaa-5fff84cc1401" />
 </p>
 
 ## ✨ Overview
