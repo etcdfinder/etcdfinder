@@ -30,8 +30,10 @@ type DatastoreConfig struct {
 type EtcdConfig struct {
 	Endpoints             string `mapstructure:"endpoints"`
 	RootPrefixEtcd        string `mapstructure:"root_etcd_prefix"`
-	WatchEventChannelSize int    `mapstructure:"watch_event_channel_size"`
-	PaginationLimit       int    `mapstructure:"pagination_limit"`
+	WatchEventChannelSize int64  `mapstructure:"watch_event_channel_size"`
+	PaginationLimit       int64  `mapstructure:"pagination_limit"`
+	EtcdAuditPeriod       int64  `mapstructure:"etcd_audit_period"` // in seconds
+	MaxWatchRetries       int64  `mapstructure:"max_watch_retries"`
 }
 
 type MeilisearchConfig struct {
@@ -47,6 +49,7 @@ func Load(configPath string) (*Config, error) {
 		viper.SetConfigName("config")
 		viper.SetConfigType("yaml")
 		viper.AddConfigPath(".")
+		viper.AddConfigPath("internal/config")
 	}
 
 	// Environment variables will have highest priority

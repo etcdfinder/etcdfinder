@@ -7,6 +7,8 @@ etcd:
   root_etcd_prefix: ""
   watch_event_channel_size: 100
   pagination_limit: 10000
+  etcd_audit_period: 60
+  max_watch_retries: 5
 datastore:
   type: meilisearch
   meilisearch:
