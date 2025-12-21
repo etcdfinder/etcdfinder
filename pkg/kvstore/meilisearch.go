@@ -97,6 +97,10 @@ func (ms *MeilisearchStore) Search(ctx context.Context, searchStr string) ([]com
 		MatchingStrategy: ms.matchingStrategy,
 	})
 	if err != nil {
+		if msErr, ok := err.(*meilisearch.Error); ok && msErr.StatusCode == 404 {
+			logger.Infof("Index not found during search, returning empty results: %v", err)
+			return []common.KV{}, nil
+		}
 		return nil, fmt.Errorf("search failed: %w", err)
 	}
 
