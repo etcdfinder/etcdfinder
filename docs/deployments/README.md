@@ -1,8 +1,14 @@
 # Deployments
 
+## Quickstart
+
+To try out etcdfinder, use the quickstart deployment. It runs with etcd and Meilisearch.
+
+See [quickstart deployment guide](quickstart/deployment-guide.md)
+
 ## Docker Compose
 
-Quick local deployment with etcd and Meilisearch.
+Quick docker compose deployment with Meilisearch.
 
 See [docker-compose deployment guide](docker-compose/deployment-guide.md)
 
