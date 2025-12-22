@@ -1,5 +1,3 @@
-
-
 services:
   etcdfinder-ui:
     image: ghcr.io/etcdfinder/etcdfinder-ui:latest
@@ -37,7 +35,7 @@ services:
     networks:
       - etcdfinder-net
     environment:
-      MEILI_NO_ANALYTICS: true
+      MEILI_NO_ANALYTICS: "true"
     volumes:
       - meilisearch_data:/var/lib/meilisearch
     restart: unless-stopped
@@ -58,6 +56,7 @@ services:
       ETCD_INITIAL_ADVERTISE_PEER_URLS: http://etcd:2380
       ETCD_INITIAL_CLUSTER: etcd=http://etcd:2380
       ETCD_INITIAL_CLUSTER_STATE: new
+      ETCD_ENABLE_V2: "true"
     volumes:
       - etcd_data:/etcd-data
     restart: unless-stopped

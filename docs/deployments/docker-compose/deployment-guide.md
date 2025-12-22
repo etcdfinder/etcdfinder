@@ -13,15 +13,20 @@ etcd:
 
 ## Quick Start
 
+This deployment requires you to provide your own etcd endpoints via the `ETCD_ENDPOINTS` environment variable.
+
 ```bash
-# Start all services
-docker-compose up -d
+# Run with a single endpoint
+ETCD_ENDPOINTS=http://your-etcd-host:2379 docker-compose up -d
 
-# Check logs
-docker-compose logs -f
+# Run with multiple endpoints
+ETCD_ENDPOINTS=http://etcd1:2379,http://etcd2:2379 docker-compose up -d
+```
 
-# Stop services
-docker-compose down
+If you don't have an existing etcd cluster and want to test etcdfinder with a local etcd instance, use the **Quickstart Deployment** instead:
+
+```bash
+cd ../quickstart && docker-compose up -d
 ```
 
 ## Configuration

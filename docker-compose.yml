@@ -1,13 +1,31 @@
-version: '3'
 services:
   meilisearch:
     image: getmeili/meilisearch:v1.10
     ports:
       - "7700:7700"
     environment:
-      - MEILI_NO_ANALYTICS=true
+      MEILI_NO_ANALYTICS: "true"
     volumes:
       - meili_data:/meili_data
 
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.13
+    container_name: etcd
+    ports:
+      - "127.0.0.1:22379:2379"
+    environment:
+      ETCD_NAME: etcd
+      ETCD_DATA_DIR: /etcd-data
+      ETCD_LISTEN_CLIENT_URLS: http://0.0.0.0:2379
+      ETCD_ADVERTISE_CLIENT_URLS: http://0.0.0.0:2379
+      ETCD_LISTEN_PEER_URLS: http://0.0.0.0:2380
+      ETCD_INITIAL_ADVERTISE_PEER_URLS: http://0.0.0.0:2380
+      ETCD_INITIAL_CLUSTER: etcd=http://0.0.0.0:2380
+      ETCD_INITIAL_CLUSTER_STATE: new
+      ETCD_ENABLE_V2: "true"
+    volumes:
+      - etcd_data:/etcd-data
+
 volumes:
   meili_data:
+  etcd_data:
