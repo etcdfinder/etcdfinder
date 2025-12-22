@@ -1,4 +1,14 @@
 services:
+  etcdfinder-ui:
+    image: ghcr.io/etcdfinder/etcdfinder-ui:latest
+    pull_policy: always
+    container_name: etcdfinder-ui
+    ports:
+      - "3000:3000"
+    environment:
+      BACKEND_URL: http://host.docker.internal:8080
+    restart: unless-stopped
+
   meilisearch:
     image: getmeili/meilisearch:v1.10
     ports:
