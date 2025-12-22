@@ -37,14 +37,26 @@ func main() {
 
 	// Initialize etcd client
 	logger.Infof("Connecting to etcd at %s", conf.Etcd.Endpoints)
-	etcdClient, err := etcd.NewClient(
-		strings.Split(conf.Etcd.Endpoints, lib.ETCD_ENDPOINTS_SEPERATOR),
-		conf.Etcd.WatchEventChannelSize,
-		conf.Etcd.RootPrefixEtcd,
-		conf.Etcd.PaginationLimit,
-		conf.Etcd.EtcdAuditPeriod,
-		conf.Etcd.MaxWatchRetries,
-	)
+	var etcdClient etcd.BaseClient
+	if conf.Etcd.Version == lib.ETCD_V3 {
+		etcdClient, err = etcd.NewClientV3(
+			strings.Split(conf.Etcd.Endpoints, lib.ETCD_ENDPOINTS_SEPERATOR),
+			conf.Etcd.WatchEventChannelSize,
+			conf.Etcd.RootPrefixEtcd,
+			conf.Etcd.PaginationLimit,
+			conf.Etcd.EtcdAuditPeriod,
+			conf.Etcd.MaxWatchRetries,
+		)
+	} else {
+		etcdClient, err = etcd.NewClientV2(
+			strings.Split(conf.Etcd.Endpoints, lib.ETCD_ENDPOINTS_SEPERATOR),
+			conf.Etcd.WatchEventChannelSize,
+			conf.Etcd.RootPrefixEtcd,
+			conf.Etcd.PaginationLimit,
+			conf.Etcd.EtcdAuditPeriod,
+			conf.Etcd.MaxWatchRetries,
+		)
+	}
 	if err != nil {
 		logger.Fatalf("Failed to create etcd client: %v", err)
 	}

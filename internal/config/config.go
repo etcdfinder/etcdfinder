@@ -28,12 +28,13 @@ type DatastoreConfig struct {
 }
 
 type EtcdConfig struct {
-	Endpoints             string `mapstructure:"endpoints"`
-	RootPrefixEtcd        string `mapstructure:"root_etcd_prefix"`
-	WatchEventChannelSize int64  `mapstructure:"watch_event_channel_size"`
-	PaginationLimit       int64  `mapstructure:"pagination_limit"`
-	EtcdAuditPeriod       int64  `mapstructure:"etcd_audit_period"` // in seconds
-	MaxWatchRetries       int64  `mapstructure:"max_watch_retries"`
+	Version               lib.EtcdVersion `mapstructure:"version"`
+	Endpoints             string          `mapstructure:"endpoints"`
+	RootPrefixEtcd        string          `mapstructure:"root_etcd_prefix"`
+	WatchEventChannelSize int64           `mapstructure:"watch_event_channel_size"`
+	PaginationLimit       int64           `mapstructure:"pagination_limit"`
+	EtcdAuditPeriod       int64           `mapstructure:"etcd_audit_period"` // in seconds
+	MaxWatchRetries       int64           `mapstructure:"max_watch_retries"`
 }
 
 type MeilisearchConfig struct {

@@ -3,6 +3,7 @@ server:
 log:
   level: info
 etcd:
+  version: v3
   endpoints: http://localhost:22379
   root_etcd_prefix: ""
   watch_event_channel_size: 100

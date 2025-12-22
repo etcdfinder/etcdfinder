@@ -48,14 +48,16 @@ func (d *DefaultEtcdfinder) SearchKeys(ctx context.Context, searchStr string) ([
 }
 
 func (d *DefaultEtcdfinder) PutKey(ctx context.Context, key string, value string) error {
-	if err := d.etcdClt.Put(ctx, key, value); err != nil {
+	key, err := d.etcdClt.Put(ctx, key, value)
+	if err != nil {
 		return err
 	}
 	return d.kvStore.Put(ctx, key, value)
 }
 
 func (d *DefaultEtcdfinder) DeleteKey(ctx context.Context, key string) error {
-	if err := d.etcdClt.Delete(ctx, key); err != nil {
+	key, err := d.etcdClt.Delete(ctx, key)
+	if err != nil {
 		return err
 	}
 	return d.kvStore.Delete(ctx, key)
