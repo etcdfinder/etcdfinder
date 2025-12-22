@@ -9,6 +9,7 @@ require (
 	github.com/meilisearch/meilisearch-go v0.34.2
 	github.com/oklog/ulid/v2 v2.1.1
 	github.com/spf13/viper v1.21.0
+	go.etcd.io/etcd/client/v2 v2.305.26
 	go.etcd.io/etcd/client/v3 v3.6.7
 	go.uber.org/zap v1.27.0
 )

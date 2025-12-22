@@ -11,6 +11,8 @@ var (
 	ErrValueRequired         = new(ErrValueRequiredCode, "value is required")
 	ErrMalformedSearchString = new(ErrMalformedSearchStringCode, "malformed search string")
 	ErrKeyNotFound           = new(ErrKeyNotFoundCode, "key not found")
+	ErrKeyNotPut             = new(ErrKeyNotPutCode, "key not put")
+	ErrKeyNotDeleted         = new(ErrKeyNotDeletedCode, "key not deleted")
 )
 
 var statusCodeMap = map[error]int{
@@ -18,6 +20,8 @@ var statusCodeMap = map[error]int{
 	ErrValueRequired:         http.StatusBadRequest,
 	ErrMalformedSearchString: http.StatusBadRequest,
 	ErrKeyNotFound:           http.StatusNotFound,
+	ErrKeyNotPut:             http.StatusInternalServerError,
+	ErrKeyNotDeleted:         http.StatusInternalServerError,
 }
 
 const (
@@ -25,6 +29,8 @@ const (
 	ErrValueRequiredCode         = "VALUE_REQUIRED"
 	ErrMalformedSearchStringCode = "MALFORMED_SEARCH_STRING"
 	ErrKeyNotFoundCode           = "KEY_NOT_FOUND"
+	ErrKeyNotPutCode             = "KEY_NOT_PUT"
+	ErrKeyNotDeletedCode         = "KEY_NOT_DELETED"
 )
 
 // InternalError represents a domain error
