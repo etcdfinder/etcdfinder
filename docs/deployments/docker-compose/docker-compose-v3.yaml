@@ -1,35 +1,32 @@
 services:
-  etcdfinder-ui:
+  etcdfinder-ui-v3:
     image: ghcr.io/etcdfinder/etcdfinder-ui:latest
     pull_policy: always
-    container_name: etcdfinder-ui
     ports:
       - "3000:3000"
     networks:
       - etcdfinder-net
     environment:
-      BACKEND_URL: http://etcdfinder:8080
+      BACKEND_URL: http://etcdfinder-v3:8080
     restart: unless-stopped
     depends_on:
-      - etcdfinder
-  etcdfinder:
+      - etcdfinder-v3
+  etcdfinder-v3:
     image: ghcr.io/etcdfinder/etcdfinder:latest
     pull_policy: always
-    container_name: etcdfinder
     expose:
       - "8080"
     networks:
       - etcdfinder-net
     environment:
       ETCD_ENDPOINTS: ${ETCD_ENDPOINTS:?Please set ETCD_ENDPOINTS environment variable or use the quickstart deployment (cd ../quickstart && docker-compose up)}
-      DATASTORE_MEILISEARCH_HOST: http://meilisearch:7700
+      DATASTORE_MEILISEARCH_HOST: http://meilisearch-v3:7700
     restart: unless-stopped
     depends_on:
-      - meilisearch
-  meilisearch:
+      - meilisearch-v3
+  meilisearch-v3:
     image: getmeili/meilisearch:latest
     pull_policy: always
-    container_name: meilisearch
     expose:
       - "7700"
     networks:
