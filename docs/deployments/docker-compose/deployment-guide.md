@@ -1,39 +1,49 @@
 # Docker Compose Deployment
 
-Deploy etcdfinder locally with etcd and Meilisearch using Docker Compose.
+Deploy etcdfinder with your existing etcd cluster using Docker Compose.
 
-## Update your etcd configuration
+## Overview
 
-To use your etcd cluster, update the config:
+This directory contains two docker-compose files to support both etcd v2 and v3:
 
-```yaml
-etcd:
-  endpoints: your-etcd-host:2379  # Point to your etcd
-```
+- **`docker-compose-v2.yaml`**: For etcd v2 clusters
+- **`docker-compose-v3.yaml`**: For etcd v3 clusters (recommended)
+
+Choose the file that matches your etcd cluster version.
+
+> [!IMPORTANT]
+> If you don't have an existing etcd cluster and want to test etcdfinder with a local etcd instance, use the **Quickstart Deployment** instead:
+> ```bash
+> cd ../quickstart && docker-compose up -d
+> ```
 
 ## Quick Start
 
-This deployment requires you to provide your own etcd endpoints via the `ETCD_ENDPOINTS` environment variable.
+### For etcd v3 (Recommended)
 
 ```bash
 # Run with a single endpoint
-ETCD_ENDPOINTS=http://your-etcd-host:2379 docker-compose up -d
+ETCD_ENDPOINTS=http://your-etcd-host:2379 docker-compose -f docker-compose-v3.yaml up -d
 
 # Run with multiple endpoints
-ETCD_ENDPOINTS=http://etcd1:2379,http://etcd2:2379 docker-compose up -d
+ETCD_ENDPOINTS=http://etcd1:2379,http://etcd2:2379 docker-compose -f docker-compose-v3.yaml up -d
 ```
 
-If you don't have an existing etcd cluster and want to test etcdfinder with a local etcd instance, use the **Quickstart Deployment** instead:
+### For etcd v2
 
 ```bash
-cd ../quickstart && docker-compose up -d
+# Run with a single endpoint
+ETCD_ENDPOINTS=http://your-etcd-host:2379 docker-compose -f docker-compose-v2.yaml up -d
+
+# Run with multiple endpoints
+ETCD_ENDPOINTS=http://etcd1:2379,http://etcd2:2379 docker-compose -f docker-compose-v2.yaml up -d
 ```
 
 ## Configuration
 
-The compose setup uses default configuration. To customize:
+The compose setup uses default configuration with the etcd version set via the `ETCD_VERSION` environment variable. To customize further:
 
-1. Edit `internal/config/config.yaml`
+1. Edit `internal/config/config.yaml` to change default settings
 2. Or mount a custom config:
 
 ```yaml
@@ -46,12 +56,19 @@ services:
 
 ## Services
 
-The compose file includes:
+Both compose files include:
 
-- **meilisearch**: Port 7700
-- **etcdfinder**: Port 8080
+- **etcdfinder-ui**: Web UI on port 3000
+- **etcdfinder**: Backend API on port 8080
+- **meilisearch**: Search engine on port 7700
 
-## Accessing the API
+## Accessing the Services
+
+### Web UI
+
+Open your browser to `http://localhost:3000` to access the etcdfinder web interface.
+
+### API
 
 ```bash
 # Search for keys
@@ -64,8 +81,26 @@ curl -X POST http://localhost:8080/v1/put-key \
   -H "Content-Type: application/json" \
   -d '{"key": "/app/test", "value": "hello"}'
 
+# Get a key
+curl -X GET http://localhost:8080/v1/get-key \
+  -H "Content-Type: application/json" \
+  -d '{"key": "/app/test"}'
+
 # Search again
 curl -X POST http://localhost:8080/v1/search-keys \
   -H "Content-Type: application/json" \
   -d '{"search_str": "test"}'
+```
+
+## Stopping the Services
+
+```bash
+# For v3
+ETCD_ENDPOINTS=http://your-etcd-host:2379 docker-compose -f docker-compose-v3.yaml down
+
+# For v2
+ETCD_ENDPOINTS=http://your-etcd-host:2379 docker-compose -f docker-compose-v2.yaml down
+
+# To also remove volumes
+ETCD_ENDPOINTS=http://your-etcd-host:2379 docker-compose -f docker-compose-v3.yaml down -v
 ```
