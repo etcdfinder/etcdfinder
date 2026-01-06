@@ -40,7 +40,28 @@ func NewMeilisearchStore(host, indexName, matchingStrategy string) (KVStore, err
 	if _, err := client.DeleteIndex(indexName); err != nil {
 		// Ignore error as index might not exist
 		// In a production app we might want to check the error type
-		logger.Infof("Failed to delete existing index: %v", err)
+		logger.Errorf("Failed to delete existing index: %v", err)
+		return nil, err
+	}
+
+	_, err := client.Index(indexName).UpdateSettings(&meilisearch.Settings{
+		RankingRules: []string{
+			"words",
+			"exactness",
+			"typo",
+			"proximity",
+			"attribute",
+			"sort",
+		},
+		SearchableAttributes: []string{
+			lib.KEY_CONSTANT,
+		},
+		FilterableAttributes: []string{
+			lib.KEY_CONSTANT,
+		},
+	})
+	if err != nil {
+		logger.Errorf("Failed to configure index settings: %v", err)
 		return nil, err
 	}
 

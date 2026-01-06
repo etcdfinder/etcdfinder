@@ -15,4 +15,4 @@ datastore:
   meilisearch:
     host: http://localhost:7700
     index_name: etcd-keys
-    matching_strategy: frequency
+    matching_strategy: all
