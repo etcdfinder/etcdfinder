@@ -5,7 +5,7 @@ services:
     ports:
       - "3001:3000"
     networks:
-      - etcdfinder-net
+      - etcdfinder-net-v2
     environment:
       BACKEND_URL: http://etcdfinder-v2:8080
     restart: unless-stopped
@@ -17,7 +17,7 @@ services:
     expose:
       - "8080"
     networks:
-      - etcdfinder-net
+      - etcdfinder-net-v2
     environment:
       ETCD_ENDPOINTS: ${ETCD_ENDPOINTS:?Please set ETCD_ENDPOINTS environment variable or use the quickstart deployment (cd ../quickstart && docker-compose up)}
       ETCD_VERSION: v2
@@ -31,16 +31,16 @@ services:
     expose:
       - "7700"
     networks:
-      - etcdfinder-net
+      - etcdfinder-net-v2
     environment:
       MEILI_NO_ANALYTICS: "true"
     volumes:
-      - meilisearch_data:/var/lib/meilisearch
+      - meilisearch_data_v2:/var/lib/meilisearch
     restart: unless-stopped
     
 networks:
-  etcdfinder-net:
+  etcdfinder-net-v2:
     driver: bridge
 
 volumes:
-  meilisearch_data:
+  meilisearch_data_v2:
